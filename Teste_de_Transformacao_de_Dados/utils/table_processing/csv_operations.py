@@ -13,12 +13,11 @@ Functions:
 import os
 import pandas as pd
 import logging
-from typing import List, Optional, Union, Dict
+from typing import List
 
 from pandas import DataFrame
 
-from .table_operations import combine_tables
-from .data_cleaning import clean_table_headers
+from utils.table_processing.data_cleaning import clean_table_headers
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +87,6 @@ def save_tables_to_csv(
         os.makedirs(output_dir)
 
     saved_files = []
-
 
     # Create filename for combined table
     filename = f"{base_filename}_combined.csv"

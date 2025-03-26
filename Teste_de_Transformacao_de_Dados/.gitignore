@@ -1,5 +1,5 @@
-# Assets Directory
-/assets
+# Output Directory
+/output
 
 # Logs Directory
 /logs
@@ -135,7 +135,7 @@ celerybeat.pid
 
 # Environments
 .env
-.venv
+../Teste_de_Web_Scraping/.venv
 env/
 venv/
 ENV/
