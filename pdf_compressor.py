@@ -13,7 +13,6 @@ Author: Vitor Oliveira
 Date: 2025-03-25
 """
 
-
 import os
 import sys
 import logging
@@ -25,11 +24,6 @@ from utils.ensure_directory_exists import ensure_directory_exists
 
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
-)
 logger = logging.getLogger(__name__)
 
 
@@ -97,6 +91,13 @@ def compress_files(source_dir: str, output_dir: str, output_filename: Optional[s
 
 
 if __name__ == "__main__":
+    # Configure basic logging when run directly
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
+
     # When run directly, allow using from command line
     if len(sys.argv) < 3:
         print(f"Usage: python {os.path.basename(__file__)} source_directory output_directory [output_filename]")

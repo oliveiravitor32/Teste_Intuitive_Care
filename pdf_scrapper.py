@@ -1,22 +1,27 @@
 """
-ANS PDF Downloader
+ANS PDF Scraper
 
-This script downloads PDF annexes from the Brazilian National Health Agency (ANS) website.
-It specifically targets PDF files containing the keyword 'anexo' in their link text,
+This module scrapes and downloads PDF annexes from the Brazilian National Health Agency (ANS) website.
+It specifically targets PDF files containing specified keywords in their link text,
 downloads up to a configured maximum number of files, and saves them to a specified directory.
 
-The tool includes logging, error handling, and validation to ensure reliable operation.
+The module includes logging, error handling, and validation to ensure reliable operation.
 
 Usage:
-    python pdf_downloader.py
+    from pdf_scraper import scrape_pdfs
+
+    files_downloaded = scrape_pdfs(
+        url="https://example.com",
+        download_dir="downloads",
+        keywords=["anexo"],
+        max_downloads=2
+    )
 
 Author: Vitor Oliveira
 Date: 2025-03-25
 """
 
-
 import os
-import sys
 import logging
 from typing import List, Optional
 
@@ -25,22 +30,9 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
 from utils.ensure_directory_exists import ensure_directory_exists
-from pdf_compressor import compress_files
-
-
-URL = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos"
-DOWNLOAD_DIR = "assets/files"
-COMPRESS_DIR = "assets/compressed_files"
-KEYWORDS = ["anexo"]
-MAX_DOWNLOADS = 2
 
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
-)
 logger = logging.getLogger(__name__)
 
 
@@ -128,56 +120,51 @@ def download_pdf(url: str, filename: str) -> bool:
         return False
 
 
-def download_pdfs() -> bool:
+def scrape_pdfs(url: str,
+    download_dir: str,
+    keywords: List[str],
+    max_downloads: int) -> bool:
     """
-    Main function to download PDF files from ANS website.
+    Scrape and download PDF files from specified website that match given keywords.
 
-    Orchestrates the process of creating the download directory,
-    fetching the page, extracting PDF links, and downloading files
-    that match the specified criteria.
+    Args:
+        url: URL to fetch PDF files from
+        download_dir: Directory where files will be saved
+        keywords: List of keywords to match in link text (default: ["anexo"])
+        max_downloads: Maximum number of PDFs to download (default: 2)
+
+    Returns:
+        Number of successfully downloaded files
     """
 
-    if not ensure_directory_exists(DOWNLOAD_DIR):
+    if not ensure_directory_exists(download_dir):
         logger.error("Cannot proceed without valid download directory")
         return
 
     # Fetch and parse the page
-    parsed_data = fetch_and_parse_page_content(URL)
+    parsed_data = fetch_and_parse_page_content(url)
     if not parsed_data:
         logger.error("Cannot proceed without page content")
         return
 
     # Extract relevant PDF links
-    pdf_links = extract_pdf_links(parsed_data, KEYWORDS)
+    pdf_links = extract_pdf_links(parsed_data, keywords)
     if not pdf_links:
         logger.warning("No matching PDFs found")
         return
 
     # Download PDFs (limited to MAX_DOWNLOADS)
     download_count = 0
-    for i, pdf_url in enumerate(pdf_links[:MAX_DOWNLOADS]):
+    for i, pdf_url in enumerate(pdf_links[:max_downloads]):
         # Ensure absolute URL
         if not pdf_url.startswith(("http://", "https://")):
-            pdf_url = urljoin(URL, pdf_url)
+            pdf_url = urljoin(url, pdf_url)
 
         # Create a meaningful filename
-        file_path = os.path.join(DOWNLOAD_DIR, f"Anexo_{i + 1}.pdf")
+        file_path = os.path.join(download_dir, f"Anexo_{i + 1}.pdf")
 
         # Download the PDF file
         if download_pdf(pdf_url, file_path):
             download_count += 1
 
-    logger.info(f"Download process completed. Downloaded {download_count} PDFs.")
-
-
-if __name__ == "__main__":
-    try:
-        download_pdfs()
-        compress_files(DOWNLOAD_DIR, COMPRESS_DIR)
-
-    except KeyboardInterrupt:
-        logger.info("Process interrupted by user")
-        sys.exit(1)
-    except Exception as e:
-        logger.exception(f"Unexpected error: {e}")
-        sys.exit(1)
+    logger.info(f"Scraping process completed. Downloaded {download_count} PDFs.")
