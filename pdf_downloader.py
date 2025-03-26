@@ -11,7 +11,7 @@ Usage:
     python pdf_downloader.py
 
 Author: Vitor Oliveira
-Date: 2025-03-26
+Date: 2025-03-25
 """
 
 
@@ -24,9 +24,13 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
+from utils.ensure_directory_exists import ensure_directory_exists
+from pdf_compressor import compress_files
+
 
 URL = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos"
-DOWNLOAD_DIR = "assets"
+DOWNLOAD_DIR = "assets/files"
+COMPRESS_DIR = "assets/compressed_files"
 KEYWORDS = ["anexo"]
 MAX_DOWNLOADS = 2
 
@@ -42,13 +46,13 @@ logger = logging.getLogger(__name__)
 
 def fetch_and_parse_page_content(url: str) -> Optional[BeautifulSoup]:
     """
-     Fetch and parse HTML content from a specified URL.
+    Fetch and parse HTML content from a specified URL.
 
-     Args:
-         url: The URL to fetch content from
+    Args:
+        url: The URL to fetch content from
 
-     Returns:
-         BeautifulSoup object with parsed content or None if request fails
+    Returns:
+        BeautifulSoup object with parsed content or None if request fails
     """
 
     try:
@@ -63,14 +67,14 @@ def fetch_and_parse_page_content(url: str) -> Optional[BeautifulSoup]:
 
 def extract_pdf_links(parsed_data: BeautifulSoup, keywords: List[str]) -> List[str]:
     """
-       Extract PDF links containing specified keywords from parsed HTML.
+    Extract PDF links containing specified keywords from parsed HTML.
 
-       Args:
-           parsed_data: BeautifulSoup object with parsed HTML
-           keywords: List of keywords to match in link text
+    Args:
+        parsed_data: BeautifulSoup object with parsed HTML
+        keywords: List of keywords to match in link text
 
-       Returns:
-           List of URLs to PDF files matching criteria
+    Returns:
+        List of URLs to PDF files matching criteria
     """
 
     pdf_download_links = []
@@ -96,14 +100,14 @@ def extract_pdf_links(parsed_data: BeautifulSoup, keywords: List[str]) -> List[s
 
 def download_pdf(url: str, filename: str) -> bool:
     """
-      Download a PDF file from a URL and save it locally.
+    Download a PDF file from a URL and save it locally.
 
-      Args:
-          url: The URL of the PDF to download
-          filename: Local path where the PDF should be saved
+    Args:
+        url: The URL of the PDF to download
+        filename: Local path where the PDF should be saved
 
-      Returns:
-          True if download successful, False otherwise
+    Returns:
+        True if download successful, False otherwise
     """
 
     try:
@@ -124,34 +128,13 @@ def download_pdf(url: str, filename: str) -> bool:
         return False
 
 
-def ensure_directory_exists(directory: str) -> bool:
+def download_pdfs() -> bool:
     """
-        Ensure the specified directory exists, creating it if necessary.
+    Main function to download PDF files from ANS website.
 
-        Args:
-            directory: Path to check/create
-
-        Returns:
-            True if directory exists or was created, False otherwise
-    """
-
-    try:
-        if not os.path.exists(directory):
-            logger.info(f"Creating directory: {directory}")
-            os.makedirs(directory)
-        return True
-    except OSError as e:
-        logger.error(f"Failed to create directory {directory}: {e}")
-        return False
-
-
-def download_pdfs():
-    """
-      Main function to download PDF files from ANS website.
-
-      Orchestrates the process of creating the download directory,
-      fetching the page, extracting PDF links, and downloading files
-      that match the specified criteria.
+    Orchestrates the process of creating the download directory,
+    fetching the page, extracting PDF links, and downloading files
+    that match the specified criteria.
     """
 
     if not ensure_directory_exists(DOWNLOAD_DIR):
@@ -190,6 +173,8 @@ def download_pdfs():
 if __name__ == "__main__":
     try:
         download_pdfs()
+        compress_files(DOWNLOAD_DIR, COMPRESS_DIR)
+
     except KeyboardInterrupt:
         logger.info("Process interrupted by user")
         sys.exit(1)
