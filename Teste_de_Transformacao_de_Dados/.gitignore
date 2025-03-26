@@ -1,5 +1,8 @@
-# Output Directory
-/output
+# Csv_table Directory
+/csv_table
+
+# Compressed_file Directory
+/compressed_file
 
 # Logs Directory
 /logs

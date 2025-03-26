@@ -35,9 +35,12 @@ from utils.table_processing import save_tables_to_csv
 from utils.table_processing import combine_tables
 from utils.table_processing import clean_table_headers, standardize_data_types, expand_abbreviations
 
+from utils.file_compressor import compress_files
+
 # Configuration constants
-INPUT_PDF = "Anexo_1.pdf"  # Replace with your PDF file path
-OUTPUT_DIR = "output"
+INPUT_PDF = "Anexo_1.pdf"  # PDF file path
+OUTPUT_DIR = "csv_table"
+COMPRESSED_FILE_DIRECTORY = "compressed_file"
 START_PAGE = 3  # Start from page 3
 END_PAGE = None  # None means process until the end of the document
 EXTRACTION_METHOD = "both"  # Options: "lattice", "stream", "both"
@@ -189,7 +192,20 @@ def main() -> int:
             combined_df = pd.read_csv(combined_path)
             logger.info(f"Combined table has {len(combined_df)} rows and {len(combined_df.columns)} columns")
 
-        return 0
+        # Compress downloaded files
+        logger.info("Starting compression process")
+        success = compress_files(
+            source_dir=OUTPUT_DIR,
+            output_dir=COMPRESSED_FILE_DIRECTORY,
+            output_filename="Teste_Vitor_Oliveira"
+        )
+
+        if success:
+            logger.info("Compression process completed successfully")
+            return 0
+        else:
+            logger.error("Compression process failed")
+            return 1
 
     except KeyboardInterrupt:
         logging.info("Process interrupted by user")
