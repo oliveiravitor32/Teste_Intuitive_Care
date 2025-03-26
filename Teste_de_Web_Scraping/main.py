@@ -30,8 +30,8 @@ from pdf_compressor import compress_files
 # Default configuration
 CONFIG = {
     "url": "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos",
-    "download_dir": "assets/files",
-    "compress_dir": "assets/compressed_files",
+    "download_dir": "downloaded_files",
+    "compress_dir": "compressed_files",
     "keywords": ["anexo"],
     "max_downloads": 2,
     "log_level": logging.INFO

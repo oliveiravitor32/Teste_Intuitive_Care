@@ -1,5 +1,8 @@
-# Assets Directory
-/assets
+# Donwloaded Files Directory
+/downloaded_files
+
+# Compressed Files Directory
+/compressed_files
 
 # Logs Directory
 /logs
