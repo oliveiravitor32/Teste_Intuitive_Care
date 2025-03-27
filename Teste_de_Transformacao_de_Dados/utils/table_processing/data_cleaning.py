@@ -6,7 +6,6 @@ This module contains functions for cleaning and standardizing data extracted
 from PDF tables to ensure consistency and usability.
 
 Functions:
-    clean_table_headers: Standardize column names in a DataFrame
     standardize_data_types: Convert columns to appropriate data types
     expand_abbreviations: Expand abbreviations in column names and in cell values to their full form.
 """
@@ -15,51 +14,6 @@ import pandas as pd
 import logging
 
 logger = logging.getLogger(__name__)
-
-
-def clean_table_headers(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Clean up table headers by replacing missing, numeric, or malformed values
-    with more appropriate column names.
-
-    Args:
-        df: pandas DataFrame with raw headers
-
-    Returns:
-        DataFrame with cleaned headers
-    """
-    if df.empty:
-        return df
-
-    # Create a copy to avoid modifying the original
-    cleaned_df = df.copy()
-
-    # Get current column names
-    columns = cleaned_df.columns.tolist()
-
-    # Replace None, NaN or numeric-only headers
-    new_columns = []
-    for i, col in enumerate(columns):
-        # If column is None or NaN
-        if pd.isna(col):
-            new_col = f"Column_{i + 1}"
-        # If column is a number
-        elif str(col).replace('.', '', 1).isdigit():
-            new_col = f"Column_{col}"
-        # If column is empty string
-        elif str(col).strip() == '':
-            new_col = f"Column_{i + 1}"
-        else:
-            # Remove newlines and excessive spaces
-            new_col = str(col).replace('\n', ' ').strip()
-            while '  ' in new_col:
-                new_col = new_col.replace('  ', ' ')
-
-        new_columns.append(new_col)
-
-    # Set new column names
-    cleaned_df.columns = new_columns
-    return cleaned_df
 
 
 def standardize_data_types(df: pd.DataFrame) -> pd.DataFrame:
@@ -96,7 +50,7 @@ def standardize_data_types(df: pd.DataFrame) -> pd.DataFrame:
             pass
 
     # Try to convert date columns
-    date_patterns = ['%Y-%m-%d', '%d/%m/%Y', '%m/%d/%Y', '%d-%m-%Y']
+    date_patterns = ['%d/%m/%Y']
 
     for col in result_df.columns:
         # Skip numeric columns

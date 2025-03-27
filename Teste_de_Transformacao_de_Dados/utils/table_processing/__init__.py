@@ -12,12 +12,11 @@ Modules:
 """
 
 from .table_operations import combine_tables
-from .data_cleaning import clean_table_headers, standardize_data_types, expand_abbreviations
+from .data_cleaning import standardize_data_types, expand_abbreviations
 from .csv_operations import save_tables_to_csv, table_to_csv
 
 __all__ = [
     'combine_tables',
-    'clean_table_headers',
     'standardize_data_types',
     'save_tables_to_csv',
     'table_to_csv'

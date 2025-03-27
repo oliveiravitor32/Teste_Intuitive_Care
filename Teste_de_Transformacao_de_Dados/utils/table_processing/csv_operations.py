@@ -16,8 +16,9 @@ import logging
 from typing import List
 
 from pandas import DataFrame
+import csv
 
-from utils.table_processing.data_cleaning import clean_table_headers
+from utils.ensure_directory_exists import ensure_directory_exists
 
 logger = logging.getLogger(__name__)
 
@@ -48,14 +49,19 @@ def table_to_csv(
 
     try:
         # Ensure directory exists
-        os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+        ensure_directory_exists(os.path.dirname(os.path.abspath(output_path)))
 
-        # Clean headers if requested
-        if clean_headers:
-            df = clean_table_headers(df)
+        # Save to CSV with proper quoting and NaN handling
+        df.to_csv(
+            output_path,
+            index=index,
+            encoding=encoding,
+            na_rep='',  # Replace NaN with empty string
+            quoting=csv.QUOTE_ALL,  # Quote all fields
+            quotechar='"',  # Use double quotes
+            doublequote=True,  # Properly escape quotes within fields
+        )
 
-        # Save to CSV
-        df.to_csv(output_path, index=index, encoding=encoding)
         logger.info(f"Successfully saved table to {output_path}")
         return True
     except Exception as e:
@@ -67,7 +73,6 @@ def save_tables_to_csv(
         tables: DataFrame,
         output_dir: str,
         base_filename: str,
-        clean_headers: bool = True,
         encoding: str = 'utf-8'
 ) -> List[str]:
     """
@@ -77,7 +82,6 @@ def save_tables_to_csv(
         tables: DataFrame
         output_dir: Directory to save CSV files
         base_filename: Base name for CSV files
-        clean_headers: Whether to clean table headers
         encoding: Character encoding for the CSV files
 
     Returns:
@@ -93,9 +97,7 @@ def save_tables_to_csv(
     filepath = os.path.join(output_dir, filename)
 
     # Save to CSV
-    if table_to_csv(tables, filepath,
-                    index=False, encoding=encoding,
-                    clean_headers=clean_headers):
+    if table_to_csv(tables, filepath, index=False, encoding=encoding):
         saved_files.append(filepath)
 
     if saved_files:

@@ -33,7 +33,7 @@ from table_extractor import (
 
 from utils.table_processing import save_tables_to_csv
 from utils.table_processing import combine_tables
-from utils.table_processing import clean_table_headers, standardize_data_types, expand_abbreviations
+from utils.table_processing import standardize_data_types, expand_abbreviations
 
 from utils.file_compressor import compress_files
 
@@ -149,11 +149,8 @@ def main() -> int:
         # Process tables - standardize data types and expand abbreviations in column names and cells
         processed_tables = []
         for i, table in enumerate(tables):
-            # Clean headers
-            clean_table = clean_table_headers(table)
-
             # Expand abbreviations in column names and cells only if requested
-            expanded_table = expand_abbreviations(df = clean_table, expand_cell_values= True)
+            expanded_table = expand_abbreviations(df = table, expand_cell_values= True)
 
             # Standardize data types
             standard_table = standardize_data_types(expanded_table)
