@@ -28,7 +28,6 @@ def table_to_csv(
         output_path: str,
         index: bool = False,
         encoding: str = 'utf-8',
-        clean_headers: bool = True
 ) -> bool:
     """
     Convert a single pandas DataFrame to a CSV file with enhanced options.
@@ -38,7 +37,6 @@ def table_to_csv(
         output_path: Path where the CSV file will be saved
         index: Whether to include DataFrame index in output
         encoding: Character encoding for the CSV file
-        clean_headers: Whether to clean column headers before export
 
     Returns:
         True if successful, False otherwise
@@ -50,6 +48,14 @@ def table_to_csv(
     try:
         # Ensure directory exists
         ensure_directory_exists(os.path.dirname(os.path.abspath(output_path)))
+
+        # Process text columns to handle newlines
+        for col in df.columns:
+            if df[col].dtype == object:  # Only process string columns
+                # Replace newlines with spaces in text fields
+                df[col] = df[col].apply(
+                    lambda x: x.replace('\n', ' ').replace('\r', ' ') if isinstance(x, str) else x
+                )
 
         # Save to CSV with proper quoting and NaN handling
         df.to_csv(
@@ -73,6 +79,7 @@ def save_tables_to_csv(
         tables: DataFrame,
         output_dir: str,
         base_filename: str,
+        clean_headers: bool = True,
         encoding: str = 'utf-8'
 ) -> List[str]:
     """
@@ -82,6 +89,7 @@ def save_tables_to_csv(
         tables: DataFrame
         output_dir: Directory to save CSV files
         base_filename: Base name for CSV files
+        clean_headers: Whether to clean table headers
         encoding: Character encoding for the CSV files
 
     Returns:
@@ -97,7 +105,7 @@ def save_tables_to_csv(
     filepath = os.path.join(output_dir, filename)
 
     # Save to CSV
-    if table_to_csv(tables, filepath, index=False, encoding=encoding):
+    if table_to_csv(tables, filepath,index=False, encoding=encoding):
         saved_files.append(filepath)
 
     if saved_files:
