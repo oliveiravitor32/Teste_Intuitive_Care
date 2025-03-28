@@ -3,11 +3,11 @@ CREATE DATABASE ans;
 CREATE TABLE demonstracoes_contabeis (
  id BIGSERIAL PRIMARY KEY,
  data DATE NOT NULL,
- reg_ans VARCHAR(15) NOT NULL,
- cd_conta_contabil VARCHAR(20),
+ reg_ans VARCHAR(50),
+ cd_conta_contabil VARCHAR(50),
  descricao VARCHAR(255),
- vl_saldo_inicial NUMERIC(20,2),
- vl_saldo_final NUMERIC(20,2)
+ vl_saldo_inicial MONEY NOT NULL DEFAULT 0.00,
+ vl_saldo_final MONEY NOT NULL DEFAULT 0.00
 );
 
 CREATE TABLE relatorio_cadop (
