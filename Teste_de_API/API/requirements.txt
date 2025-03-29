@@ -1,0 +1,12 @@
+# API Framework
+fastapi==0.115.12
+uvicorn==0.34.0
+pydantic==2.11.0
+
+# Data Processing
+pandas==2.2.3
+numpy==2.2.4
+
+# Search Functionality
+fuzzywuzzy==0.18.0
+python-Levenshtein==0.27.1  # For faster fuzzy matching
