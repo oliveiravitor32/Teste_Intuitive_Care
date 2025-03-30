@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import TheHeader from '@/components/layout/TheHeader.vue'
-import TheTable from '@/components/layout/TheTable.vue'
+import HeaderLayout from '@/components/layout/HeaderLayout.vue'
+import MainLayout from '@/components/layout/MainLayout.vue'
 </script>
 
 <template>
   <div class="flex py-42 justify-center">
-    <TheHeader class="fixed w-full top-0" />
-    <TheTable />
+    <HeaderLayout class="fixed w-full top-0" />
+    <MainLayout />
   </div>
 </template>
