@@ -1,8 +1,9 @@
-import { ref, computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
-import type { ISearchParams } from '@/interfaces/search-params.interface'
 import type { IOperator } from '@/interfaces/operator.interface'
+import type { ISearchParams } from '@/interfaces/search-params.interface'
 import { searchService } from '@/services/search.service'
+import debounce from 'lodash/debounce'
 
 export function useSearchService() {
   // State
@@ -18,10 +19,10 @@ export function useSearchService() {
   const hasResults = computed(() => results.value.length > 0)
   const isEmpty = computed(() => !isLoading.value && !hasResults.value)
 
-  // Search function with debounce
+  // Search function
   const performSearch = async () => {
     try {
-      console.log('performSearch', searchParams.value)
+      console.log('Search params: ', searchParams.value)
       isLoading.value = true
       error.value = null
 
@@ -42,9 +43,8 @@ export function useSearchService() {
   // Watch for changes to search params
   watch(
     searchParams,
-    () => {
-      performSearch()
-    },
+    // Debounce the search function by 300ms when search params change
+    debounce(() => performSearch(), 300),
     { deep: true },
   )
 

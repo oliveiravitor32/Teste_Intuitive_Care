@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useSearchService } from '@/composables/useSearchService'
-
-const { searchParams, results, isEmpty } = useSearchService()
+const { searchParams, results, isEmpty, isLoading } = useSearchService()
 </script>
 
 <template>
@@ -66,7 +65,10 @@ const { searchParams, results, isEmpty } = useSearchService()
         </tbody>
       </table>
       <div v-if="isEmpty" class="text-center py-3">
-        <h3>Digite na barra de pesquisas para obter resultados.</h3>
+        <h3>Digite na barra de pesquisas para obter resultados</h3>
+      </div>
+      <div v-if="isLoading" class="text-center py-3">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
       </div>
     </section>
   </main>

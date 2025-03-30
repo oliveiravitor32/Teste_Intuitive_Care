@@ -8,8 +8,6 @@ export class SearchService {
       const { data } = await apiClient.get<IOperatorsResponse>('/operators/search', {
         params,
       })
-
-      console.log('data', data)
       return data
     } catch (error) {
       // Re-throw the error to be handled by the caller
