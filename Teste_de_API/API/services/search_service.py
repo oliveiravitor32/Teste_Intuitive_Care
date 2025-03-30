@@ -2,7 +2,8 @@ import pandas as pd
 from typing import List
 
 from config import settings
-from models.operator import OperatorResponse
+from models.operator import Operator
+from models.operators_response import OperatorsResponse
 from models.search_params import SearchParams
 
 
@@ -38,7 +39,7 @@ class SearchService:
             # Initialize with empty DataFrame if file not found
             self.df = pd.DataFrame()
 
-    def search_operadoras(self, params: SearchParams) -> List[OperatorResponse]:
+    def search_operadoras(self, params: SearchParams) -> OperatorsResponse:
         """
         Search healthcare operators based on search parameters
         Returns the most relevant results
@@ -52,30 +53,25 @@ class SearchService:
         # Create mask based on selected fields
         mask = pd.Series(False, index=self.df.index)
 
-        if params.search_razao_social:
+        if params.category  ==  "razao_social":
             razao_mask = self.df['razao_social'].str.lower().str.contains(query, na=False)
             mask = mask | razao_mask
 
-        # if params.search_nome_fantasia:
-        #     nome_mask = self.df['nome_fantasia'].str.lower().str.contains(query, na=False)
-        #     mask = mask | nome_mask
-        #
-        # if params.search_cidade:
-        #     cidade_mask = self.df['cidade'].str.lower().str.contains(query, na=False)
-        #     mask = mask | cidade_mask
-        #
-        # # Apply UF filter if provided
-        # if params.uf_filter:
-        #     uf_mask = self.df['uf'].str.lower() in params.uf_filter.lower()
-        #     mask = mask & uf_mask
+        if params.category == "nome_fantasia":
+            nome_mask = self.df['nome_fantasia'].str.lower().str.contains(query, na=False)
+            mask = mask | nome_mask
+
+        if params.category == "modalidade":
+            nome_mask = self.df['modalidade'].str.lower().str.contains(query, na=False)
+            mask = mask | nome_mask
 
         results = self.df[mask]
 
         # Limit results and convert to response model
         results = results.head(params.limit)
 
-        return [
-            OperatorResponse(
+        return OperatorsResponse(
+            data = [Operator(
                 registro_ans=self._handle_nan(row.get('registro_ans', '')),
                 cnpj=self._handle_nan(row.get('cnpj', '')),
                 razao_social=self._handle_nan(row.get('razao_social', '')),
@@ -98,7 +94,7 @@ class SearchService:
                 data_registro_ans=self._handle_nan(row.get('data_registro_ans', ''))
             )
             for _, row in results.iterrows()
-        ]
+        ])
 
     def _handle_nan(self, value):
         """Convert NaN values to empty strings"""

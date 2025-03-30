@@ -4,7 +4,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class OperatorResponse(BaseModel):
+class Operator(BaseModel):
     """Healthcare operator response model"""
     registro_ans: str
     cnpj: str

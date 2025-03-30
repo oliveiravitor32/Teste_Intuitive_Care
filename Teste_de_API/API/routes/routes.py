@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
-from typing import List
-from models.operator import OperatorResponse
+from models.operators_response import OperatorsResponse
 from models.search_params import SearchParams
 
 from services.search_service import SearchService
@@ -8,16 +7,10 @@ from services.search_service import SearchService
 router = APIRouter()
 
 
-@router.get("/operators/search", response_model=List[OperatorResponse])
+@router.get("/operators/search", response_model=OperatorsResponse)
 async def search_operadoras(
-        q: str = Query(..., description="Search term"),
-        #
-        # TODO: Do when the front end is finished to check if it will be possible to handle that many custom params
-        #razao_social: Optional[bool] = Query(True, description="Search in razao_social field"),
-        #nome_fantasia: Optional[bool] = Query(True, description="Search in nome_fantasia field"),
-        #cidade: Optional[bool] = Query(False, description="Search in cidade field"),
-        #uf: Optional[str] = Query(None, description="Filter by UF/state"),
-        #limit: int = Query(10, ge=1, le=100, description="Maximum number of results"),
+        query: str = Query(..., description="Search term"),
+        category: str = Query(..., description="Search category"),
         search_service: SearchService = Depends(),
 ):
     """
@@ -25,13 +18,9 @@ async def search_operadoras(
     Returns the most relevant matches based on the search parameters.
     """
 
-    # Set truncate custom params for test
     search_params = SearchParams(
-        query=q,
-        search_razao_social=True,
-        #search_nome_fantasia=nome_fantasia,
-        #search_cidade=cidade,
-        #uf_filter=uf,
+        query=query,
+        category=category
     )
 
     # Set definitive 20 limit to avoid malicious request
