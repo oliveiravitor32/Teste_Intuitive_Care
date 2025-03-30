@@ -4,7 +4,7 @@ import TheTable from '@/components/layout/TheTable.vue'
 </script>
 
 <template>
-  <div class="flex h-screen justify-center items-center">
+  <div class="flex py-42 justify-center">
     <TheHeader class="fixed w-full top-0" />
     <TheTable />
   </div>

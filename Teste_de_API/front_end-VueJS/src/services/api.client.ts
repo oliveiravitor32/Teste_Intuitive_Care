@@ -1,0 +1,11 @@
+import axios from 'axios'
+
+// Create base API instance with common configuration
+const apiClient = axios.create({
+  baseURL: 'http://127.0.0.1:8000/api/v1',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+export default apiClient
