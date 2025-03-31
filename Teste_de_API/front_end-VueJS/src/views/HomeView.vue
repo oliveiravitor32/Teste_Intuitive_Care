@@ -5,7 +5,7 @@ import MainLayout from '@/components/layout/MainLayout.vue'
 
 <template>
   <div class="flex py-42 justify-center">
-    <HeaderLayout class="fixed w-full top-0" />
+    <HeaderLayout class="absolute w-full top-0" />
     <MainLayout />
   </div>
 </template>

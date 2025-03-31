@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import {
+  operatorFieldDefinitionsShortened,
+  type IOperatorField,
+} from '@/constants/operator-field-definitions'
 import type { IOperator } from '@/interfaces/operator.interface'
-import { computed } from 'vue'
 
 const props = defineProps<{
   results: IOperator[]
@@ -8,49 +11,38 @@ const props = defineProps<{
   isLoading: boolean
 }>()
 
-const formatText = (text: string | null | undefined, maxLength = 50): string => {
-  if (!text) return '-'
-  return text.toLowerCase().length > maxLength
-    ? text[0] + text.substring(1, maxLength).toLowerCase().trim() + '...'
-    : text[0] + text.substring(1).toLowerCase().trim()
-}
-const formatDate = (text: string | null | undefined): string => {
-  if (!text) return '-'
-  const date = new Date(text)
-  return date.toLocaleDateString('pt-BR', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  })
+const emit = defineEmits<{
+  'operator-selected': [operator: IOperator]
+}>()
+
+const onOperatorSelected = (operator: IOperator) => {
+  emit('operator-selected', operator)
 }
 
-// Pre-format data to avoid recalculating in the template
-const formattedOperators = computed(() =>
-  props.results.map((operator) => ({
-    ...operator,
-    formattedRegistro: formatText(operator.registro_ans),
-    formattedRazaoSocial: formatText(operator.razao_social),
-    formattedNomeFantasia: formatText(operator.nome_fantasia),
-    formattedModalidade: formatText(operator.modalidade),
-    formattedCidade: formatText(operator.cidade),
-    formattedData: formatDate(operator.data_registro_ans),
-  })),
-)
+// Format a single field based on column definition
+function formatField(operator: IOperator, column: IOperatorField): string {
+  const value = operator[column.key as keyof IOperator]
+  return column.formatter ? column.formatter(value) : String(value || '-')
+}
 </script>
 <template>
   <tbody>
     <tr
-      class="h-12 hover:cursor-pointer py-2 text-center items-center text-xs hover:bg-neutral-300 grid grid-cols-6 gap-2 border-b-1 border-gray-300"
-      v-for="(item, index) in formattedOperators"
-      :key="item.formattedRegistro || index"
+      class="relative group grid grid-cols-5 gap-2 min-h-12 hover:cursor-pointer py-2 text-center items-center text-xs hover:bg-neutral-300 border-b-1 border-gray-300"
+      v-for="(operator, index) in props.results"
+      @click="onOperatorSelected(props.results[index])"
+      @keydown.enter="onOperatorSelected(props.results[index])"
+      :key="operator.registro_ans || index"
       tabindex="0"
+      title="Clique para ver mais detalhes"
     >
-      <td>{{ item.formattedRegistro }}</td>
-      <td>{{ item.formattedRazaoSocial }}</td>
-      <td>{{ item.formattedNomeFantasia }}</td>
-      <td>{{ item.formattedModalidade }}</td>
-      <td>{{ item.formattedCidade }}</td>
-      <td>{{ item.formattedData }}</td>
+      <td v-for="column in operatorFieldDefinitionsShortened" :key="column.key">
+        {{ formatField(operator, column) }}
+      </td>
+      <i
+        style="font-size: 0.6rem"
+        class="absolute bg-gray-200 p-1 rounded-sm pi pi-arrow-up-right-and-arrow-down-left-from-center right-2 top-0.5 text-gray-600"
+      ></i>
     </tr>
   </tbody>
   <div v-if="isEmpty" class="text-center py-3">

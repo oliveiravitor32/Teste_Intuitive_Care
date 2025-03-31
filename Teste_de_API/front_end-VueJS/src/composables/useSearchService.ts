@@ -22,13 +22,10 @@ export function useSearchService() {
   // Search function
   const performSearch = async () => {
     try {
-      console.log('Search params: ', searchParams.value)
       isLoading.value = true
       error.value = null
 
       const response = await searchService.searchOperators(searchParams.value)
-
-      console.log('response', response)
 
       results.value = [...response.data]
     } catch (err) {
@@ -50,8 +47,6 @@ export function useSearchService() {
 
   // Method to force update
   function updateSearch(newParams: Partial<ISearchParams>) {
-    console.log('updateSearch', newParams)
-
     searchParams.value = {
       ...searchParams.value,
       ...newParams,

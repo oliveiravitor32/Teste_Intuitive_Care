@@ -26,7 +26,7 @@ function updateQuery(value: string) {
 
 <template>
   <form @submit.prevent class="flex gap-5 justify-between items-center">
-    <h2 id="search-heading" class="font-bold">Operadoras de plano de saude ativas</h2>
+    <h2 id="search-heading" class="font-bold">Operadoras de plano de saúde ativas</h2>
     <div class="flex gap-4 text-sm">
       <div>
         <label for="category-select">Categoria: </label>
