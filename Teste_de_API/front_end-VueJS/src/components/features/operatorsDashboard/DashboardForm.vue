@@ -2,8 +2,9 @@
 import type { ISearchParams } from '@/interfaces/search-params.interface'
 
 const SEARCH_CATEGORIES = [
+  { value: 'registro_ans', label: 'Registro ANS' },
   { value: 'razao_social', label: 'Razão Social' },
-  { value: 'nome_fantasia', label: 'Nome Fantasia' },
+  { value: 'modalidade', label: 'Modalidade' },
 ]
 
 const props = defineProps<{

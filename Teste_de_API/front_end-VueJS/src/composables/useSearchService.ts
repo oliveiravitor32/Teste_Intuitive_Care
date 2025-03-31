@@ -9,7 +9,7 @@ export function useSearchService() {
   // State
   const searchParams = ref<ISearchParams>({
     query: '',
-    category: 'razao_social',
+    category: 'registro_ans',
   })
   const results = ref<IOperator[]>([])
   const isLoading = ref<boolean>(false)

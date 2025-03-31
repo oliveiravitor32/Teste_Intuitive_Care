@@ -53,12 +53,12 @@ class SearchService:
         # Create mask based on selected fields
         mask = pd.Series(False, index=self.df.index)
 
-        if params.category  ==  "razao_social":
-            razao_mask = self.df['razao_social'].str.lower().str.contains(query, na=False)
+        if params.category  ==  "registro_ans":
+            razao_mask = self.df['registro_ans'].str.contains(query, na=False)
             mask = mask | razao_mask
 
-        if params.category == "nome_fantasia":
-            nome_mask = self.df['nome_fantasia'].str.lower().str.contains(query, na=False)
+        if params.category == "razao_social":
+            nome_mask = self.df['razao_social'].str.lower().str.contains(query, na=False)
             mask = mask | nome_mask
 
         if params.category == "modalidade":
