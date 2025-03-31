@@ -7,9 +7,14 @@ export interface IOperatorField {
   formatter: (value: string | undefined) => string
 }
 
-export const capitalizeText = (text: string | null | undefined): string => {
+const capitalizeText = (text: string | null | undefined): string => {
   if (!text) return '-'
   return text[0] + text.substring(1).toLowerCase()
+}
+
+const upperCase = (text: string | null | undefined): string => {
+  if (!text) return '-'
+  return text.toUpperCase()
 }
 
 const truncateAndCapitalizeTText = (text: string | null | undefined, maxLength = 35): string => {
@@ -41,7 +46,7 @@ export const operatorFieldDefinitions: IOperatorField[] = [
   { key: 'complemento', label: 'Complemento', formatter: capitalizeText },
   { key: 'bairro', label: 'Bairro', formatter: capitalizeText },
   { key: 'cidade', label: 'Cidade', formatter: capitalizeText },
-  { key: 'uf', label: 'UF', formatter: capitalizeText },
+  { key: 'uf', label: 'UF', formatter: upperCase },
   { key: 'cep', label: 'CEP', formatter: capitalizeText },
   { key: 'ddd', label: 'DDD', formatter: capitalizeText },
   { key: 'telefone', label: 'Telefone', formatter: capitalizeText },
