@@ -1,0 +1,133 @@
+{
+	"info": {
+		"_postman_id": "a016c3bb-2854-4212-8f4d-0f57fd2b13fe",
+		"name": "Colecao_Teste_de_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31542272"
+	},
+	"item": [
+		{
+			"name": "Search_by_registro_ans",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/operators/search?query=1&category=registro_ans",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"operators",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "1"
+						},
+						{
+							"key": "category",
+							"value": "registro_ans"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search_by_razao_social",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/operators/search?query=administradora&category=razao_social",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"operators",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "administradora"
+						},
+						{
+							"key": "category",
+							"value": "razao_social"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search_by_modalidade",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/operators/search?query=administradora&category=modalidade",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"operators",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "administradora"
+						},
+						{
+							"key": "category",
+							"value": "modalidade"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
