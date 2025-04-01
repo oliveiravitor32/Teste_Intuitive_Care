@@ -2,7 +2,7 @@
 
 Este projeto consiste em 4 testes, onde cada teste se localiza em uma pasta diferente. Ademais, cada teste possui um objetivo e um conhecimento necessário diferente.
 
-> **Observação**: Para informações sobre o uso de cada programa, consulte o arquivo README localizado na raiz de cada projeto.
+> **Observação**: Para informações sobre o uso de cada programa, consulte o arquivo README localizado na raiz de cada programa.
 
 ---
 
